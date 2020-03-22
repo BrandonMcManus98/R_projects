@@ -1,0 +1,41 @@
+# Optimization for Optimal Escapement of Fishery 
+
+set.seed(100)
+
+K <- 300000
+gamma <- 1
+p <- 5
+c <- 1
+r <- .02
+B <- 1/(1+r)
+s_star <- runif(100,min=2500,max=250000)
+iter <- 100
+periods <- 40
+xt<-rep(0,40)
+xt[1] <- 100000
+ht<-matrix(rep(0,4000),ncol = 100) #harvest at time t
+st<-matrix(rep(0,4000),ncol = 100)
+profit <- matrix(rep(0,4000),ncol=100)
+
+
+for (i in 1:100){
+  for(t in 1:40){
+    st[t,i] <- pmin(xt[t],s_star[i])
+    ht[t,i] <- pmax(0,xt[t]-s_star[i])
+    xt[t+1] <- st[t,i]*exp(gamma*(1-st[t,i]/K))
+    profit[t,i] <- B^(t-1)*(p*ht[t,i]-(c/2)*(ht[t,i]^2/xt[t]))
+
+    
+  }
+}
+
+netpresentvalue <- colSums(profit)
+netpresentvalue
+
+maxpresentvalue <- max(netpresentvalue)
+maxpresentvalue
+
+which.max(netpresentvalue)
+
+max_s_star <- s_star[97]
+max_s_star
