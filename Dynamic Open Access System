@@ -1,0 +1,27 @@
+#dynamic open access system for a basic fishery 
+
+c<-1 #cost parameter
+K<-1 #carrying capacity
+p<-200 #price
+q<-0.01 #catchability coefficient
+g<-0.1 #intrinsic growth rate
+n<-0.3 # n= 0.3, 1.0
+
+Periods<-500
+N<-c(Periods)
+
+x<-rep(0,N)
+E<-rep(0,N)
+
+x[1]<-0.5
+E[1]<-1
+
+for (t in 1:500) {
+  x[t+1]<-(1+g -(g*x[t]/K)-q*E[t])*x[t]
+  E[t+1]<-(1+(n*(p*q*x[t]-c)))*E[t]
+  
+}
+
+stable_plot<-plot(x,E)
+
+title(main="stable spiral ",xlab="x", ylab="E")
