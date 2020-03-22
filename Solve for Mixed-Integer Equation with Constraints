@@ -1,0 +1,36 @@
+# max Z = x + y
+# s.t. –3x + 2y ≥ 1
+# –8x + 10y ≤ 10
+# y ∈ {0,1}, x ≥ 0.3
+
+# Solving a Mixed-Integer equation in R
+
+#install.packages("lpSolve") 
+
+#initialize lpSolve library to use
+library(lpSolve)
+
+#create objective function
+z.objective <- c(1,1) 
+
+#initialize constraints in a matrix
+z.constraints <- matrix(c(-3,2,
+                          -8,10),nrow = 2,ncol = 2,byrow = TRUE) #
+
+#initialize inequality signs for each constraint
+z.sign <- c(">=","<=") 
+
+#initialize right hand side of inequality constraints 
+z.right_coefficients <- c(1,10,)
+
+#create optimum conditions to be solved
+lp(direction = "max",z.objective,z.constraints,z.sign,z.right_coefficients)
+
+#solve the solution for each variable (x,y)
+lp(direction = "max",z.objective,z.constraints,z.sign,z.right_coefficients, binary.vec = 2)$solution
+
+#Solve the solution for the objective variable Z
+lp(direction = "max",z.objective,z.constraints,z.sign,z.right_coefficients, binary.vec = 2)$objval
+
+
+
